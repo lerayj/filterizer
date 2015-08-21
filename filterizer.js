@@ -1,8 +1,10 @@
-		var FilterHelper = new function FilterHelper () {
-		this.filtersList = {};
+
+		Filterizer = {
+		filtersList : {},
+
 	//tagname est la class du filter
 	//filter est la fonction de filtre
-this.filterEngine = function(collection, query, tagname, filter) {
+		filterEngine : function(collection, query, tagname, filter) {
 		var filterListScoped = this.filtersList;
 		var res = _.filter(collection.fetch(), function(elem){ 
 			var val = null;
@@ -25,17 +27,17 @@ this.filterEngine = function(collection, query, tagname, filter) {
 		Session.set("filteredList",sesFilteredList);
 		console.log("FilterEngine: ", Session.get("filteredList"));
     	return res;
-	};
+	},
 
 	// @collection: Mongo cursor collection
 	// @fieldCollec: collection field filtered on
 	// @query: input to filter
 	// @tagFilterClass: 
-	this.filter = function(collection, query, tagFilterClass) {
+	filter : function(collection, query, tagFilterClass) {
 		this.filterEngine(collection, query, tagFilterClass, this.filtersList[tagFilterClass].filterFunction);
-	};
+	},
 
-	this.removeFilter = function(tagToDelete) {
+	removeFilter : function(tagToDelete) {
 		var sesFilteredList = Session.get("filteredList");
 		_.each(sesFilteredList, function(tagsArray,key){
 			var idx = tagsArray.indexOf(tagToDelete);
@@ -49,22 +51,22 @@ this.filterEngine = function(collection, query, tagname, filter) {
 		Session.set("filteredList",sesFilteredList);
 		
 			
-	};
+	},
 
-	this.filterUrlHandler = function(tagname, value) {
+	filterUrlHandler : function(tagname, value) {
 		window.location.href = window.location.href + '?';
 		var query = tagname+"="+value;
 
-	};
+	},
 
-	this.isFiltered = function(id){
+	isFiltered :function(id){
 		var sesFilteredList = Session.get("filteredList");
 		if(sesFilteredList.hasOwnProperty(id))
 			return true;
 		return false;
-	};
+	},
 
-	this.filterAlreadyApply = function(filterName){
+	filterAlreadyApply : function(filterName){
 		var sesFilteredList = Session.get("filteredList");
 		var result = _.find(sesFilteredList, function(elem){
 			if(elem.indexOf(filterName) != -1)
@@ -75,5 +77,4 @@ this.filterEngine = function(collection, query, tagname, filter) {
 			return false;
 		return true;
 	}
-	}();
-}
+	};
